@@ -294,12 +294,13 @@ def build_ui() -> gr.Blocks:
         theme=gr.themes.Soft(),
         css="""
         .disclaimer {
-            background-color: #fff3cd;
-            border: 1px solid #ffc107;
+            background-color: #1a2332;
+            border: 1px solid #3b82f6;
             border-radius: 8px;
             padding: 12px;
             margin: 10px 0;
             font-size: 0.9em;
+            color: #e2e8f0;
         }
         .gdprag-header {
             text-align: center;

@@ -2,7 +2,7 @@
 
 **GDPRag** (GDPR + RAG) è un sistema di Retrieval-Augmented Generation che ti permette di chattare con i tuoi documenti aziendali usando intelligenza artificiale **europea**.
 
-Tutto configurabile dal browser — nessun file da modificare a mano.
+Tutto configurabile dal browser. L'unica cosa da impostare è la cartella documenti nel file `.env`.
 
 ## Perché GDPRag?
 
@@ -14,30 +14,62 @@ Tutto configurabile dal browser — nessun file da modificare a mano.
 | **Training sui dati** | No | Dipende dal provider |
 | **AI Act compliance** | Disclaimer incluso | Da implementare |
 
+## Prerequisiti
+
+- **Docker Desktop** installato ([Mac](https://docs.docker.com/desktop/setup/install/mac-install/) / [Windows](https://docs.docker.com/desktop/setup/install/windows-install/) / [Linux](https://docs.docker.com/desktop/setup/install/linux/))
+- **API key Mistral** (gratuita) — vedi sotto come ottenerla
+
+### Come ottenere la API key Mistral (gratis)
+
+1. Vai su [console.mistral.ai](https://console.mistral.ai/)
+2. Crea un account (o accedi con Google/GitHub)
+3. Vai su **API Keys** → **Create new key**
+4. Copia la chiave — la inserirai nella UI di GDPRag al primo avvio
+
+Mistral offre un free tier per iniziare. I costi per un uso normale sono minimi (vedi tabella costi sotto).
+
 ## Quick Start (3 minuti)
 
+### 1. Clona e configura
+
 ```bash
-# 1. Clona il repository
-git clone <repo-url> gdprag
+git clone https://github.com/aringad/gdprag.git
 cd gdprag
-
-# 2. Configura
 cp env.example .env
-# Modifica DOCUMENTS_ROOT nel .env con il percorso dei tuoi documenti
-
-# 3. Avvia
-docker compose up -d
-
-# 4. Apri il browser
-open http://localhost:7860
 ```
 
-Al primo avvio, vai nella tab **⚙️ Impostazioni** per:
-1. Inserire la tua API key Mistral (gratuita su [console.mistral.ai](https://console.mistral.ai/))
-2. Navigare le cartelle montate e selezionare quelle da indicizzare
-3. Scegliere il modello AI
+### 2. Imposta la cartella documenti
 
-Poi vai in **📥 Gestione Documenti** → **📁 Cartelle configurate** → **🚀 Indicizza**.
+Apri il file `.env` e imposta `DOCUMENTS_ROOT` con il percorso della cartella che contiene i tuoi documenti:
+
+```bash
+# Mac
+DOCUMENTS_ROOT=/Users/tuonome/Documents
+
+# Linux
+DOCUMENTS_ROOT=/home/tuonome/Documents
+
+# Windows (Docker Desktop)
+DOCUMENTS_ROOT=C:\Users\TuoNome\Documents
+```
+
+Questa cartella verrà montata come `/data/` dentro il container (in sola lettura). Dalla UI potrai poi navigare le sottocartelle e scegliere **quali** indicizzare — non viene toccato nulla automaticamente.
+
+### 3. Avvia
+
+```bash
+docker compose up -d
+```
+
+### 4. Configura dalla UI
+
+Apri **http://localhost:7860** nel browser.
+
+1. Tab **⚙️ Impostazioni** → incolla la tua API key Mistral → **💾 Salva e verifica**
+2. Sempre in Impostazioni → **🔍 Esplora** `/data/` per vedere le tue cartelle
+3. Aggiungi le cartelle che vuoi indicizzare (es. `/data/clienti`, `/data/procedure`)
+4. Tab **📥 Gestione Documenti** → **🚀 Indicizza cartelle configurate**
+5. Tab **💬 Chat** → chatta con i tuoi documenti!
 
 ## Come funziona
 

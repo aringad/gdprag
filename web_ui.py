@@ -330,7 +330,6 @@ def build_ui() -> gr.Blocks:
             with gr.TabItem("💬 Chat"):
                 chatbot = gr.ChatInterface(
                     fn=chat_fn,
-                    type="messages",
                     title="",
                     description="Fai domande sui documenti aziendali indicizzati.",
                     examples=[
@@ -339,9 +338,6 @@ def build_ui() -> gr.Blocks:
                         "Cosa dice la policy sulla gestione degli incidenti?",
                         "Quali sono le scadenze NIS2?",
                     ],
-                    retry_btn="🔄 Riprova",
-                    undo_btn="↩️ Annulla",
-                    clear_btn="🗑️ Nuova chat",
                 )
 
             # ── Tab Gestione Documenti ──

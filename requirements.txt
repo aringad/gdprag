@@ -1,0 +1,14 @@
+# RAG Engine — dipendenze
+mistralai>=1.0.0
+chromadb>=0.5.0
+gradio>=5.0.0
+
+# Parser documenti
+pymupdf>=1.24.0        # PDF
+python-docx>=1.1.0     # DOCX
+openpyxl>=3.1.0        # XLSX
+python-pptx>=1.0.0     # PPTX
+beautifulsoup4>=4.12.0  # HTML
+xlrd>=2.0.0            # XLS (vecchio formato)
+odfpy>=1.4.0           # ODT (LibreOffice)
+striprtf>=0.0.26       # RTF

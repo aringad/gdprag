@@ -1,0 +1,57 @@
+# ─────────────────────────────────────────────
+# docker-compose.yml — GDPRag
+# ─────────────────────────────────────────────
+#
+# SETUP RAPIDO:
+#
+#   1. Copia env.example → .env
+#      cp env.example .env
+#
+#   2. In .env, imposta DOCUMENTS_ROOT con la cartella
+#      radice dei tuoi documenti (es. /home/utente/Documenti)
+#
+#   3. Avvia:
+#      docker compose up -d
+#
+#   4. Apri http://localhost:7860
+#
+#   5. Nella tab ⚙️ Impostazioni:
+#      - Inserisci la tua API key Mistral
+#      - Naviga /data/ e aggiungi le cartelle da indicizzare
+#
+# STOP:
+#   docker compose down
+# ─────────────────────────────────────────────
+
+services:
+  gdprag:
+    build: .
+    container_name: gdprag
+    restart: unless-stopped
+
+    ports:
+      - "7860:7860"
+
+    environment:
+      # Opzionale: API key Mistral via env var (la UI ha priorita')
+      - MISTRAL_API_KEY=${MISTRAL_API_KEY:-}
+
+    volumes:
+      # ── Dati persistenti (non toccare) ──
+      - gdprag_chroma:/app/chroma_db
+      - gdprag_config:/app/config
+
+      # ── I tuoi documenti ──
+      # Monta la cartella radice dei tuoi documenti.
+      # Dentro il container sara' accessibile come /data/
+      # Poi dalla UI navighi e selezioni le sottocartelle.
+      #
+      # Imposta DOCUMENTS_ROOT nel file .env, oppure
+      # modifica direttamente qui sotto.
+      - ${DOCUMENTS_ROOT:-./documenti}:/data:ro
+
+volumes:
+  gdprag_chroma:
+    # Database vettoriale persistente
+  gdprag_config:
+    # Configurazione persistente (API key, cartelle, modello)

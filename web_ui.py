@@ -289,25 +289,7 @@ def _get_folders_list() -> str:
 
 def build_ui() -> gr.Blocks:
 
-    with gr.Blocks(
-        title="GDPRag",
-        theme=gr.themes.Soft(),
-        css="""
-        .disclaimer {
-            background-color: #1a2332;
-            border: 1px solid #3b82f6;
-            border-radius: 8px;
-            padding: 12px;
-            margin: 10px 0;
-            font-size: 0.9em;
-            color: #e2e8f0;
-        }
-        .gdprag-header {
-            text-align: center;
-            padding: 10px 0;
-        }
-        """
-    ) as app:
+    with gr.Blocks(title="GDPRag") as app:
 
         gr.Markdown("""
         # 🛡️ GDPRag — RAG GDPR-Compliant
@@ -426,7 +408,7 @@ def build_ui() -> gr.Blocks:
 
                 # ── API Key ──
                 gr.Markdown("### 🔑 API Key Mistral")
-                api_status = gr.Markdown(value=get_api_key_status())
+                api_status = gr.Markdown(value="")
                 with gr.Row():
                     api_key_input = gr.Textbox(
                         label="API Key",
@@ -455,7 +437,7 @@ def build_ui() -> gr.Blocks:
                         ("Mistral Medium (bilanciato)", "mistral-medium-latest"),
                         ("Mistral Large (massima qualita')", "mistral-large-latest"),
                     ],
-                    value=get_current_model(),
+                    value="mistral-small-latest",
                     label="Modello per le risposte"
                 )
                 save_model_btn = gr.Button("💾 Salva modello")
@@ -505,7 +487,7 @@ def build_ui() -> gr.Blocks:
                     add_folder_btn = gr.Button("➕ Aggiungi", scale=1)
 
                 folder_action_result = gr.Markdown()
-                folders_list = gr.Markdown(value=_get_folders_list())
+                folders_list = gr.Markdown(value="")
                 add_folder_btn.click(
                     add_folder_fn,
                     inputs=[folder_path_input, folder_label_input],
@@ -577,6 +559,10 @@ def build_ui() -> gr.Blocks:
                 *GDPRag — Sviluppato da Mediaform s.c.r.l.*
                 """)
 
+        # Carica valori iniziali dopo il rendering (evita blocco all'avvio)
+        app.load(get_api_key_status, outputs=[api_status])
+        app.load(_get_folders_list, outputs=[folders_list])
+
     return app
 
 
@@ -591,5 +577,8 @@ if __name__ == "__main__":
         server_name=host,
         server_port=port,
         share=False,
-        show_error=True
+        show_error=True,
+        ssr_mode=False,
+        theme=gr.themes.Soft(),
+        css=".disclaimer { background-color: #1a2332; border: 1px solid #3b82f6; border-radius: 8px; padding: 12px; margin: 10px 0; font-size: 0.9em; color: #e2e8f0; }"
     )
